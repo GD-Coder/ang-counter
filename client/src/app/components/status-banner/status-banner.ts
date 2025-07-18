@@ -48,8 +48,7 @@ import { Component, Input } from '@angular/core';
   `,
   styles: [
     `
-      /* Add any additional styles here if you want */
-      /* You can add fade-in-slide animation here if you like */
+      /* Added to prevent Angular from complaining */
     `,
   ],
 })
