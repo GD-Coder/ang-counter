@@ -54,12 +54,14 @@ export class DowntimeCardComponent {
   @Input() currentThreshold!: Threshold;
   @Input() totalThreshold!: Threshold;
 
+   /* Format hours and minutes for downtime display */
   formatDuration(totalMinutes: number): string {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${hours > 0 ? `${hours}h ` : ''}${minutes}m`;
   }
 
+   /* Sets color based on given thresholds */
   getColorClass(score: number, threshold: Threshold): string {
     if (!threshold) return 'text-white dark:text-blue-200';
     if (score <= threshold.low) return 'text-green-600';
