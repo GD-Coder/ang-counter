@@ -11,6 +11,7 @@ type Threshold = {
   selector: 'app-score-card',
   standalone: true,
   imports: [CountUpModule, CommonModule],
+   /* Using templates inline instead of in seperate HTML files */
   template: `
     <div
       class="w-full h-full rounded overflow-hidden shadow-lg animate-fadeIn flex flex-col md:flex-row"
