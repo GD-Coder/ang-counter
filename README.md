@@ -10,3 +10,12 @@ docker-compose up --build
 ```
 
 This will start the server and the front-end in development mode with hot-reloading.
+
+## Client
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Server
+
+The Express server listens on port 3200
+
