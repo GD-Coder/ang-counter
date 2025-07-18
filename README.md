@@ -17,5 +17,5 @@ Once the server is running, open your browser and navigate to `http://localhost:
 
 ## Server
 
-The Express server listens on port 3200
+The Express server listens on port `3200`
 
