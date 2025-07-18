@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: ./client
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./client:/app # Mount your local code into the container
+      - /app/node_modules # Anonymous volume to prevent overwriting node_modules from host
+    command: npm run start # Start with hot reload
+
+  backend:
+    build: ./server
+    ports:
+      - '3200:3200'
