@@ -78,7 +78,7 @@ export class ControlToggleComponent implements OnInit {
 
   visible = false;
   isMobile = false;
-
+  /* Initialize logic, fetch data, or set up state when the component is ready */
   ngOnInit(): void {
     const saved = localStorage.getItem('showControls');
     if (saved !== null) {
