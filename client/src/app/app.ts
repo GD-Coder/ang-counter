@@ -125,7 +125,7 @@ export class App {
         this.totalDowntime.set(totalDT.count);
         this.currentDowntime.set(currentDT.count);
 
-        const percent = (current.count * 100) / this.targetRate();
+        const percent = (average.count * 100) / this.targetRate();
         this.percentage.set(percent);
       } catch (err) {
         console.error('Polling error:', err);
