@@ -63,7 +63,7 @@ export class App {
   percentage = signal(0);
   totalDowntime = signal(0);
   currentDowntime = signal(0);
-  avgThreshold = signal({ low: 50, mid: 150 });
+  avgThreshold = signal({ low: 225, mid: 340 });
   countThreshold = signal({ low: 15000, mid: 34000 });
   percThreshold = signal({ low: 65, mid: 75 });
 
