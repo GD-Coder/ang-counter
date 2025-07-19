@@ -5,13 +5,16 @@ import {
   EventEmitter,
   HostListener,
   OnInit,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { heroEyeSolid, heroEyeSlashSolid } from "@ng-icons/heroicons/solid";
 
 @Component({
-  selector: 'control-toggle',
+  selector: "control-toggle",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgIcon],
+  viewProviders: [provideIcons({ heroEyeSolid, heroEyeSlashSolid })],
   template: `
     <div
       class="group fixed bottom-0 left-0 z-50 m-2 transform transition-all duration-700 ease-out"
@@ -25,40 +28,12 @@ import { CommonModule } from '@angular/common';
         [attr.aria-label]="showControls ? 'Hide Controls' : 'Show Controls'"
         class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 dark:bg-gray-700 hover:bg-blue-600 dark:hover:bg-gray-600 transition"
       >
-        <ng-container [ngSwitch]="iconDirection">
-          <svg
-            *ngSwitchCase="'left'"
-            class="h-6 w-6 text-white dark:text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M15.5 19.5L9 12l6.5-7.5z" />
-          </svg>
-          <svg
-            *ngSwitchCase="'right'"
-            class="h-6 w-6 text-white dark:text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M8.5 4.5L15 12l-6.5 7.5z" />
-          </svg>
-          <svg
-            *ngSwitchCase="'up'"
-            class="h-6 w-6 text-white dark:text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M4.5 15.5L12 9l7.5 6.5z" />
-          </svg>
-          <svg
-            *ngSwitchCase="'down'"
-            class="h-6 w-6 text-white dark:text-blue-200"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M4.5 8.5L12 15l7.5-6.5z" />
-          </svg>
+        <ng-container *ngIf="!showControls; else openIcon">
+          <ng-icon class="text-white" name="heroEyeSolid" />
         </ng-container>
+        <ng-template #openIcon>
+          <ng-icon class="text-white" name="heroEyeSlashSolid" />
+        </ng-template>
       </button>
 
       <div
@@ -67,7 +42,7 @@ import { CommonModule } from '@angular/common';
                group-hover:opacity-100 transition-opacity duration-200
                whitespace-nowrap"
       >
-        {{ showControls ? 'Hide Controls' : 'Show Controls' }}
+        {{ showControls ? "Hide Controls" : "Show Controls" }}
       </div>
     </div>
   `,
@@ -80,16 +55,16 @@ export class ControlToggleComponent implements OnInit {
   isMobile = false;
   /* Initialize logic, fetch data, or set up state when the component is ready */
   ngOnInit(): void {
-    const saved = localStorage.getItem('showControls');
+    const saved = localStorage.getItem("showControls");
     if (saved !== null) {
-      this.showControlsChange.emit(saved === 'true');
+      this.showControlsChange.emit(saved === "true");
     }
 
     this.checkScreenSize();
     setTimeout(() => (this.visible = true), 500);
   }
 
-  @HostListener('window:resize')
+  @HostListener("window:resize")
   checkScreenSize(): void {
     this.isMobile = window.innerWidth < 768;
   }
@@ -97,11 +72,11 @@ export class ControlToggleComponent implements OnInit {
   toggleControls(): void {
     this.showControls = !this.showControls;
     this.showControlsChange.emit(this.showControls);
-    localStorage.setItem('showControls', String(this.showControls));
+    localStorage.setItem("showControls", String(this.showControls));
   }
 
-  get iconDirection(): 'left' | 'right' | 'up' | 'down' {
-    if (this.showControls) return this.isMobile ? 'up' : 'left';
-    return this.isMobile ? 'down' : 'right';
+  get iconDirection(): "left" | "right" | "up" | "down" {
+    if (this.showControls) return this.isMobile ? "up" : "left";
+    return this.isMobile ? "down" : "right";
   }
 }

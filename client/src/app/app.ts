@@ -1,3 +1,4 @@
+import { ToastrService } from "ngx-toastr";
 import { FormsModule } from "@angular/forms";
 import { RouterOutlet } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -70,7 +71,7 @@ export class App {
     localStorage.getItem("showControls") === "false" ? false : true
   );
 
-  constructor() {
+  constructor(private toastr: ToastrService) {
     // Set sun visibility after delay
     setTimeout(() => this.sunVisible.set(true), 1000);
 
@@ -84,13 +85,12 @@ export class App {
     if (this.pollingIntervalId === 0) {
       this.startPolling();
     } else {
-      console.log("Polling already in progress.");
+      this.toastr.error("Polling already in progress.", "Error");
     }
   }
   // Stop button
   handleStop() {
     if (this.pollingIntervalId !== 0) {
-      console.log(this.pollingIntervalId);
       clearInterval(this.pollingIntervalId);
       this.pollingIntervalId = 0;
     }

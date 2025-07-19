@@ -1,4 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "ngx-toastr/toastr";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Make toast drop shadow black */
+.toast-container .ngx-toastr:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) !important;
+}
