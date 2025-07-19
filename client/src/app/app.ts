@@ -1,23 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, signal, effect } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from "@angular/common";
+import { Component, signal, effect } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { RouterOutlet } from "@angular/router";
 
-// Import child components here when converted
-import { SelectBoxComponent } from './components/selectbox/selectbox';
-import { ListComponent } from './components/list/list';
-import { ButtonPanelComponent } from './components/button-panel/button-panel';
-import { ScoreCardComponent } from './components/scorecard/scorecard';
-import { DowntimeCardComponent } from './components/downtime-card/downtime-card';
-import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle';
-import { ControlToggleComponent } from './components/control-toggle/control-toggle';
-import { StatusBannerComponent } from './components/status-banner/status-banner';
-import { CountUpModule } from 'ngx-countup';
-
+// Import child components here
+import { SelectBoxComponent } from "./components/selectbox/selectbox";
+import { ListComponent } from "./components/list/list";
+import { ButtonPanelComponent } from "./components/button-panel/button-panel";
+import { ScoreCardComponent } from "./components/scorecard/scorecard";
+import { DowntimeCardComponent } from "./components/downtime-card/downtime-card";
+import { ThemeToggleComponent } from "./components/theme-toggle/theme-toggle";
+import { ControlToggleComponent } from "./components/control-toggle/control-toggle";
+import { StatusBannerComponent } from "./components/status-banner/status-banner";
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   imports: [
-    CountUpModule,
     RouterOutlet,
     CommonModule,
     FormsModule,
@@ -30,28 +27,28 @@ import { CountUpModule } from 'ngx-countup';
     ControlToggleComponent,
     DowntimeCardComponent,
   ],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  templateUrl: "./app.html",
+  styleUrl: "./app.css",
 })
 export class App {
-  protected readonly title = signal('client');
+  protected readonly title = signal("MD Counter");
   machines = signal([
-    'Machine 1',
-    'Machine 2',
-    'Machine 3',
-    'Machine 4',
-    'Machine 5',
-    'Machine 6',
-    'Machine 7',
-    'Machine 8',
-    'Machine 9',
-    'Machine 10',
-    'Machine 12',
-    'Machine 13',
-    'Machine 14',
-    'Machine 15',
+    "Machine 1",
+    "Machine 2",
+    "Machine 3",
+    "Machine 4",
+    "Machine 5",
+    "Machine 6",
+    "Machine 7",
+    "Machine 8",
+    "Machine 9",
+    "Machine 10",
+    "Machine 12",
+    "Machine 13",
+    "Machine 14",
+    "Machine 15",
   ]);
-  operators = signal(['Johnny Walker', 'Jim Beam', 'Evan Williams']);
+  operators = signal(["Johnny Walker", "Jim Beam", "Evan Williams"]);
 
   selectedMachine = signal(this.machines()[0]);
   selectedOperator = signal(this.operators()[0]);
@@ -68,7 +65,7 @@ export class App {
   percThreshold = signal({ low: 50, mid: 75 });
 
   showControls = signal(
-    localStorage.getItem('showControls') === 'false' ? false : true
+    localStorage.getItem("showControls") === "false" ? false : true
   );
 
   sunVisible = signal(false);
@@ -79,7 +76,7 @@ export class App {
 
     // Persist control toggle in localStorage
     effect(() => {
-      localStorage.setItem('showControls', this.showControls().toString());
+      localStorage.setItem("showControls", this.showControls().toString());
     });
 
     // Polling logic
@@ -87,12 +84,12 @@ export class App {
   }
 
   handleStart() {
-    console.log('Start Clicked...');
+    console.log("Start Clicked...");
     // Add actual logic here
   }
 
   handleStop() {
-    console.log('Stop Clicked...');
+    console.log("Stop Clicked...");
     // Add actual logic here
   }
 
@@ -101,19 +98,19 @@ export class App {
       try {
         const [average, current, total, totalDT, currentDT] = await Promise.all(
           [
-            fetch('http://127.0.0.1:3200/average-count').then((res) =>
+            fetch("http://127.0.0.1:3200/average-count").then((res) =>
               res.json()
             ),
-            fetch('http://127.0.0.1:3200/current-count').then((res) =>
+            fetch("http://127.0.0.1:3200/current-count").then((res) =>
               res.json()
             ),
-            fetch('http://127.0.0.1:3200/total-count').then((res) =>
+            fetch("http://127.0.0.1:3200/total-count").then((res) =>
               res.json()
             ),
-            fetch('http://127.0.0.1:3200/total-downtime').then((res) =>
+            fetch("http://127.0.0.1:3200/total-downtime").then((res) =>
               res.json()
             ),
-            fetch('http://127.0.0.1:3200/current-downtime').then((res) =>
+            fetch("http://127.0.0.1:3200/current-downtime").then((res) =>
               res.json()
             ),
           ]
@@ -128,7 +125,7 @@ export class App {
         const percent = (average.count * 100) / this.targetRate();
         this.percentage.set(percent);
       } catch (err) {
-        console.error('Polling error:', err);
+        console.error("Polling error:", err);
       }
     };
 
@@ -148,6 +145,3 @@ export class App {
     this.selectedOperator.set(operator);
   }
 }
-// export class App {
-//   protected readonly title = signal('client')
-// }
