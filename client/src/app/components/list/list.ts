@@ -16,7 +16,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <li
           *ngFor="let item of items"
           (click)="onClick(item)"
-          class="px-4 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 transition-colors"
+          class="px-4 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-700 dark:text-blue-200 hover:bg-gray-200 transition-colors"
         >
           {{ item }}
         </li>
