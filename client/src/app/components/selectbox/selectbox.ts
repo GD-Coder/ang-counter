@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
     </label>
     <select
       (change)="handleChange($event)"
-      class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+      class="w-full px-3 py-2 rounded border bg-gray-100 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
     >
       <option *ngFor="let opt of options">{{ opt }}</option>
     </select>
