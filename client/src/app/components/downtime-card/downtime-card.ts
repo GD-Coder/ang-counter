@@ -12,11 +12,11 @@ type Threshold = {
   imports: [CommonModule],
   template: `
     <div
-      class="w-full h-full border border-gray-700 dark:border-gray-500 rounded overflow-hidden shadow-lg animate-fadeIn flex bg-white dark:bg-gray-800"
+      class="w-full h-full border border-gray-300 dark:border-gray-500 rounded overflow-hidden shadow-lg animate-fadeIn flex bg-white dark:bg-gray-800"
     >
       <!-- Current Downtime -->
       <div
-        class="w-1/2 p-6 text-center border-r border-gray-700 dark:border-gray-500"
+        class="w-1/2 p-6 text-center border-r border-gray-300 dark:border-gray-500"
       >
         <div
           class="text-xs sm:text-sm md:text-lg font-bold uppercase dark:text-blue-200 text-gray-600"
