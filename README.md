@@ -3,7 +3,7 @@ Full Stack Angular Project
 
 ## Building
 
-Use Docker Desktop to build the project, run the following command from the root directory:
+Clone repo using `git clone` then use Docker Desktop to build the project, run the following command from the root directory:
 
 ```docker
 docker-compose up --build
