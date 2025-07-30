@@ -126,20 +126,19 @@
     <!-- SelectBox -->
     <div class="mb-4">
       <app-select-box
-        [label]="'Operators'"
-        [options]="operators()"
-        (selectionChange)="selectOperator($event)"
+        [label]="'Machines'"
+        [options]="machines()"
+        (selectionChange)="selectMachine($event)"
       ></app-select-box>
     </div>
 
     <!-- List -->
-    <div class="mb-4">
-      <app-list
-        [title]="'Machines'"
-        [items]="machines()"
-        (itemClick)="selectMachine($event)"
-      ></app-list>
-    </div>
+    <app-list
+      [title]="'Operators'"
+      [items]="selectedOperatorGroup()"
+      [displayFn]="operatorDisplay"
+      (itemClick)="selectOperator($event)"
+    ></app-list>
 
     <!-- ButtonPanel wrapper -->
     <div class="relative p-4">

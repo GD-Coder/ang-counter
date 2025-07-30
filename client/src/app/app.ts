@@ -1,130 +1,163 @@
-import { ToastrService } from "ngx-toastr";
+import {
+  Component,
+  inject,
+  OnDestroy,
+  effect,
+  signal,
+  computed,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterOutlet } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { Component, signal, effect } from "@angular/core";
+import { ToastrService } from "ngx-toastr";
 
-// Import child components here
-import { SelectBoxComponent } from "./components/selectbox/selectbox";
-import { ListComponent } from "./components/list/list";
-import { ButtonPanelComponent } from "./components/button-panel/button-panel";
-import { ScoreCardComponent } from "./components/scorecard/scorecard";
-import { DowntimeCardComponent } from "./components/downtime-card/downtime-card";
-import { ThemeToggleComponent } from "./components/theme-toggle/theme-toggle";
-import { ControlToggleComponent } from "./components/control-toggle/control-toggle";
-import { StatusBannerComponent } from "./components/status-banner/status-banner";
+// Import child components
+import { SelectBoxComponent } from "./components/selectbox";
+import { ListComponent } from "./components/list";
+import { ButtonPanelComponent } from "./components/button-panel";
+import { ScoreCardComponent } from "./components/scorecard";
+import { DowntimeCardComponent } from "./components/downtime-card";
+import { ThemeToggleComponent } from "./components/theme-toggle";
+import { ControlToggleComponent } from "./components/control-toggle";
+import { StatusBannerComponent } from "./components/status-banner";
+
 @Component({
   selector: "app-root",
+  standalone: true,
   imports: [
-    RouterOutlet,
     CommonModule,
     FormsModule,
-    ListComponent,
+    RouterOutlet,
     SelectBoxComponent,
+    ListComponent,
     ButtonPanelComponent,
-    StatusBannerComponent,
-    ThemeToggleComponent,
     ScoreCardComponent,
-    ControlToggleComponent,
     DowntimeCardComponent,
+    ThemeToggleComponent,
+    ControlToggleComponent,
+    StatusBannerComponent,
   ],
   templateUrl: "./app.html",
   styleUrl: "./app.css",
 })
-export class App {
-  protected readonly title = signal("MD Counter");
-  private pollingIntervalId: number = 0;
-  machines = signal([
-    "Machine 1",
-    "Machine 2",
-    "Machine 3",
-    "Machine 4",
-    "Machine 5",
-    "Machine 6",
-    "Machine 7",
-    "Machine 8",
-    "Machine 9",
-    "Machine 10",
-    "Machine 12",
-    "Machine 13",
-    "Machine 14",
-    "Machine 15",
+export class App implements OnDestroy {
+  private toastr = inject(ToastrService);
+  private pollingIntervalId: ReturnType<typeof setInterval> | null = null;
+
+  readonly title = signal("MD Counter");
+  readonly sunVisible = signal(false);
+
+  // Machines (used in selectbox)
+  readonly machines = signal(["Machine 1", "Machine 2", "Machine 3"]);
+  readonly selectedMachine = signal(this.machines()[0]);
+
+  // 2D Operator array (used in list)
+  readonly operators = signal<string[][]>([
+    ["Johnny Walker", "Jim Beam", "Evan Williams"],
+    ["Operator 1", "Operator 2", "Operator 3"],
+    ["Operator 4", "Operator 5", "Operator 6"],
   ]);
-  sunVisible = signal(false);
-  operators = signal(["Johnny Walker", "Jim Beam", "Evan Williams"]);
 
-  totalCount = signal(0);
-  percentage = signal(0);
-  averageRate = signal(0);
-  currentCount = signal(0);
-  targetRate = signal(525);
-  totalDowntime = signal(0);
-  currentDowntime = signal(0);
-  selectedMachine = signal(this.machines()[0]);
-  percThreshold = signal({ low: 50, mid: 75 });
-  avgThreshold = signal({ low: 225, mid: 340 });
-  selectedOperator = signal(this.operators()[0]);
-  countThreshold = signal({ low: 15000, mid: 34000 });
+  readonly selectedOperator = signal<string>(this.operators()[0][0]);
 
-  // Select machine
-  showControls = signal(
-    localStorage.getItem("showControls") === "false" ? false : true
+  // Other metrics
+  readonly totalCount = signal(0);
+  readonly percentage = signal(0);
+  readonly averageRate = signal(0);
+  readonly currentCount = signal(0);
+  readonly totalDowntime = signal(0);
+  readonly currentDowntime = signal(0);
+  readonly targetRate = signal(525);
+
+  readonly percThreshold = signal({ low: 50, mid: 75 });
+  readonly avgThreshold = signal({ low: 262, mid: 393 });
+  readonly countThreshold = signal({ low: 15000, mid: 34000 });
+
+  readonly showControls = signal(
+    localStorage.getItem("showControls") !== "false"
   );
+  // Use the machine index to select current operators in the list
+  public selectedOperatorGroup = computed(() => {
+    const machineIndex = this.machines().indexOf(this.selectedMachine());
+    return this.operators()[machineIndex] || [];
+  });
 
-  constructor(private toastr: ToastrService) {
-    // Set sun visibility after delay
+  constructor() {
     setTimeout(() => this.sunVisible.set(true), 1000);
-
-    // Persist control toggle in localStorage
+    // Use effect to store the state of the controls
     effect(() => {
       localStorage.setItem("showControls", this.showControls().toString());
     });
+    // Use effect to keep accurate operator selection
+    effect(() => {
+      const group = this.selectedOperatorGroup();
+      if (group.length > 0) {
+        this.selectedOperator.set(group[0]);
+      }
+    });
   }
-  // Start button
-  handleStart() {
-    if (this.pollingIntervalId === 0) {
+
+  // Ensure polling is stopped
+  ngOnDestroy() {
+    this.handleStop();
+  }
+
+  // Start gathering metrics
+  public handleStart() {
+    if (!this.pollingIntervalId) {
       this.startPolling();
+      this.toastr.success("Metric panel started!", "Success");
     } else {
       this.toastr.error("Polling already in progress.", "Error");
     }
   }
-  // Stop button
-  handleStop() {
-    if (this.pollingIntervalId !== 0) {
+
+  // Stop gathering metrics
+  public handleStop() {
+    if (this.pollingIntervalId) {
       clearInterval(this.pollingIntervalId);
-      this.pollingIntervalId = 0;
+      this.pollingIntervalId = null;
+      this.toastr.success("Metric panel stopped!", "Success");
     }
   }
-  // Start polling
-  async startPolling() {
-    await this.fetchCounts();
-    this.pollingIntervalId = setInterval(() => {
-      this.fetchCounts();
-    }, 5000);
+
+  // Fetch metrics from API
+  private async startPolling() {
+    await this.updateMetrics();
+    this.pollingIntervalId = setInterval(() => this.updateMetrics(), 5000);
   }
-  // Show/Hide controls
-  toggleControls() {
+
+  // Toggle controls
+  public toggleControls() {
     this.showControls.set(!this.showControls());
   }
-  // Select machine
-  selectMachine(machine: string) {
+
+  public operatorDisplay = (op: string) => op;
+
+  // Update the machine
+  public selectMachine(machine: string) {
     this.selectedMachine.set(machine);
   }
-  // Select operator
-  selectOperator(operator: string) {
-    this.selectedOperator.set(operator);
+
+  // Update selected operators
+  public selectOperator(op: string) {
+    this.selectedOperator.set(op);
   }
-  // Get all counts
-  fetchCounts = async () => {
+
+  // Centralize polling call
+  private async fetchJSON(url: string) {
+    const res = await fetch(url);
+    return res.json();
+  }
+  // Update scorecard metrics
+  private async updateMetrics() {
     try {
       const [average, current, total, totalDT, currentDT] = await Promise.all([
-        fetch("http://127.0.0.1:3200/average-count").then((res) => res.json()),
-        fetch("http://127.0.0.1:3200/current-count").then((res) => res.json()),
-        fetch("http://127.0.0.1:3200/total-count").then((res) => res.json()),
-        fetch("http://127.0.0.1:3200/total-downtime").then((res) => res.json()),
-        fetch("http://127.0.0.1:3200/current-downtime").then((res) =>
-          res.json()
-        ),
+        this.fetchJSON("http://127.0.0.1:3200/average-count"),
+        this.fetchJSON("http://127.0.0.1:3200/current-count"),
+        this.fetchJSON("http://127.0.0.1:3200/total-count"),
+        this.fetchJSON("http://127.0.0.1:3200/total-downtime"),
+        this.fetchJSON("http://127.0.0.1:3200/current-downtime"),
       ]);
 
       this.averageRate.set(average.count);
@@ -136,7 +169,7 @@ export class App {
       const percent = (average.count * 100) / this.targetRate();
       this.percentage.set(percent);
     } catch (err) {
-      console.error("Polling error:", err);
+      this.toastr.error(`Polling error: ${err}`, "Error");
     }
-  };
+  }
 }
