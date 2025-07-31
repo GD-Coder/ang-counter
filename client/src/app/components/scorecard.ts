@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { CountUpModule } from 'ngx-countup';
+import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
+import { CountUpModule } from "ngx-countup";
 
 type Threshold = {
   low: number;
@@ -8,10 +8,10 @@ type Threshold = {
 };
 
 @Component({
-  selector: 'app-score-card',
+  selector: "app-score-card",
   standalone: true,
   imports: [CountUpModule, CommonModule],
-   /* Using templates inline instead of in seperate HTML files */
+  /* Using templates inline instead of in seperate HTML files */
   template: `
     <div
       class="w-full h-full rounded overflow-hidden shadow-lg animate-fadeIn flex flex-col md:flex-row"
@@ -49,7 +49,7 @@ type Threshold = {
         <!-- Top right box -->
         <div
           [ngClass]="getColorClass(currentCount, countThreshold)"
-          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
+          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ currentLabel }}
@@ -62,7 +62,7 @@ type Threshold = {
         <!-- Bottom right box -->
         <div
           [ngClass]="getColorClass(percentage, percThreshold)"
-          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
+          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ percentageLabel }}
@@ -92,9 +92,9 @@ export class ScoreCardComponent {
   @Input() percThreshold!: Threshold;
 
   getColorClass(score: number, threshold: Threshold): string {
-    if (!threshold) return 'text-white';
-    if (score <= threshold.low) return 'text-red-600 dark:text-red-500';
-    if (score <= threshold.mid) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-green-600';
+    if (!threshold) return "text-white";
+    if (score <= threshold.low) return "text-red-600 dark:text-red-500";
+    if (score <= threshold.mid) return "text-yellow-600 dark:text-yellow-400";
+    return "text-green-600";
   }
 }
