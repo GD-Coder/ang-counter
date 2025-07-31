@@ -21,7 +21,7 @@ type Threshold = {
         <!-- Top left box -->
         <div
           [ngClass]="getColorClass(averageRate, avgThreshold)"
-          class="dark:bg-black bg-white border dark:border-gray-700 border-gray-300 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
+          class="dark:bg-black bg-gray-100  border dark:border-gray-700 border-gray-300 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ averageLabel }}
@@ -33,7 +33,7 @@ type Threshold = {
 
         <!-- Bottom left box -->
         <div
-          class="text-gray-600 dark:text-blue-200 dark:bg-black bg-white border dark:border-gray-700 border-gray-300 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
+          class="text-gray-600 dark:text-blue-200 dark:bg-black bg-gray-100 border dark:border-gray-700 border-gray-300 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ targetLabel }}
@@ -49,7 +49,7 @@ type Threshold = {
         <!-- Top right box -->
         <div
           [ngClass]="getColorClass(currentCount, countThreshold)"
-          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300 dark:bg-black"
+          class="bg-gray-100 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300 dark:bg-black"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ currentLabel }}
@@ -62,7 +62,7 @@ type Threshold = {
         <!-- Bottom right box -->
         <div
           [ngClass]="getColorClass(percentage, percThreshold)"
-          class="text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300 dark:bg-black"
+          class="bg-gray-100 text-center py-6 md:py-4 px-4 flex flex-col justify-center flex-1 border dark:border-gray-700 border-gray-300 dark:bg-black"
         >
           <div class="text-base md:text-lg font-bold uppercase tracking-wide">
             {{ percentageLabel }}
