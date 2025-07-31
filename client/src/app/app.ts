@@ -68,7 +68,7 @@ export class App implements OnDestroy {
   readonly totalDowntime = signal(0);
   readonly currentDowntime = signal(0);
   readonly targetRate = signal(525);
-
+  // Threshholds
   readonly percThreshold = signal({ low: 50, mid: 75 });
   readonly avgThreshold = signal({ low: 262, mid: 393 });
   readonly countThreshold = signal({ low: 15000, mid: 34000 });
@@ -108,7 +108,7 @@ export class App implements OnDestroy {
       this.startPolling();
       this.toastr.success("Metric panel started!", "Success");
     } else {
-      this.toastr.error("Polling already in progress.", "Error");
+      this.toastr.info("Polling already in progress.", "Info");
     }
   }
 
