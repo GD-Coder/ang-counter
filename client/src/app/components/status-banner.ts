@@ -9,7 +9,7 @@ import { heroUserSolid, heroAtSymbolSolid } from "@ng-icons/heroicons/solid";
   imports: [NgIcon],
   template: `
     <div
-      class="w-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-blue-200 p-3 rounded shadow text-center transition-all duration-300 transform animate-fade-in-slide"
+      class="w-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-blue-200 p-3 rounded shadow text-center transform animate-fade-in-slide"
     >
       <p
         class="text-sm md:text-base font-medium uppercase flex flex-col md:flex-row items-center justify-center gap-1"
